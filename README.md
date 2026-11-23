@@ -24,7 +24,7 @@ model/
   model_info_v2.0.0.json
   train_baseline.py                  # recette de la v1, pour mémoire
 FICHE_DONNEES.md        # gabarit de la fiche du jeu de données (tâche 7)
-NOTE_KARIM.md           # gabarit de la note (tâche 7)
+NOTE_CLIENT.md           # gabarit de la note (tâche 7)
 ```
 
 ## Démarrage
