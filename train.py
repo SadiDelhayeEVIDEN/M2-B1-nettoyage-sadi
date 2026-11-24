@@ -48,6 +48,7 @@ from features import (
 )
 from model.train_baseline import build_pipeline as build_v1
 from nettoyage import nettoyer
+from qualite import ecrire_rapport
 
 ROOT = Path(__file__).resolve().parent
 MODEL_DIR = ROOT / "model"
@@ -174,10 +175,13 @@ def evaluate(model, X: pd.DataFrame, y: pd.Series) -> dict:
 
 def main() -> None:
     engine = create_engine(os.environ["DATABASE_URL"])
-    df = load_data(engine)
-    lignes_brutes = len(df)
-    df, compte_rendu = nettoyer(df)
+    brut = load_data(engine)
+    lignes_brutes = len(brut)
+    df, compte_rendu = nettoyer(brut)
     print(f"Nettoyage : {lignes_brutes} → {len(df)} réservations\n", compte_rendu.to_string(index=False))
+    rapport_path = MODEL_DIR / f"quality_report_v{VERSION}.json"
+    ecrire_rapport(brut, df, rapport_path)
+    print("Rapport de qualité écrit dans", rapport_path)
     train, test = split_train_test(df)
     print(f"Entraînement : {len(train)} réservations | test : {len(test)} réservations")
 
@@ -221,6 +225,7 @@ def main() -> None:
             "rows_before": lignes_brutes,
             "rows_after": len(df),
             "rules": compte_rendu.to_dict(orient="records"),
+            "quality_report": rapport_path.name,
         },
         "train_period": [str(train["arrival_date"].min().date()), str(train["arrival_date"].max().date())],
         "test_period": [str(test["arrival_date"].min().date()), str(test["arrival_date"].max().date())],
