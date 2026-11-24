@@ -1,0 +1,75 @@
+{
+  "genere_le": "2026-11-24T12:38:30",
+  "lignes": {
+    "avant_nettoyage": 78703,
+    "apres_nettoyage": 78042
+  },
+  "periode": [
+    "2015-07-01",
+    "2016-12-31"
+  ],
+  "taux_annulation": {
+    "avant_nettoyage": 0.3619,
+    "apres_nettoyage": 0.3643
+  },
+  "controles": {
+    "children_manquant": {
+      "avant": 4,
+      "apres": 0,
+      "traitee": true
+    },
+    "prix_aberrant": {
+      "avant": 1,
+      "apres": 0,
+      "traitee": true
+    },
+    "sejour_sans_nuit": {
+      "avant": 571,
+      "apres": 0,
+      "traitee": true
+    },
+    "reservation_vide": {
+      "avant": 113,
+      "apres": 0,
+      "traitee": true
+    },
+    "groupe_sur_une_ligne": {
+      "avant": 12,
+      "apres": 0,
+      "traitee": true
+    },
+    "enfants_sans_adulte": {
+      "avant": 160,
+      "apres": 160,
+      "traitee": false
+    },
+    "prix_nul_inexplique": {
+      "avant": 471,
+      "apres": 406,
+      "traitee": false
+    },
+    "non_refund_annule": {
+      "avant": 10376,
+      "apres": 10375,
+      "traitee": false
+    },
+    "lignes_identiques": {
+      "avant": 24812,
+      "apres": 24745,
+      "traitee": false
+    },
+    "valeur_negative": {
+      "avant": 0,
+      "apres": 0,
+      "traitee": false
+    },
+    "categorie_inconnue": {
+      "avant": 0,
+      "apres": 0,
+      "traitee": false
+    }
+  },
+  "manquants_apres_nettoyage": {
+    "country": 394
+  }
+}
