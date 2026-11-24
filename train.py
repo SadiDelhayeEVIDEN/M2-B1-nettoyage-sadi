@@ -47,13 +47,14 @@ from features import (
     ajouter_variables,
 )
 from model.train_baseline import build_pipeline as build_v1
+from nettoyage import nettoyer
 
 ROOT = Path(__file__).resolve().parent
 MODEL_DIR = ROOT / "model"
 TEST_MONTHS = 4
 TARGET = "is_canceled"
 # Passe à "2.1.0" quand le nettoyage est branché (tâche 5) : le modèle v2.0.0 reste intact pour la comparaison
-VERSION = "2.0.0"
+VERSION = "2.1.0"
 
 load_dotenv(ROOT / ".env")
 
@@ -174,7 +175,9 @@ def evaluate(model, X: pd.DataFrame, y: pd.Series) -> dict:
 def main() -> None:
     engine = create_engine(os.environ["DATABASE_URL"])
     df = load_data(engine)
-    # TODO (tâche 5) : nettoyer df ici avec nettoyage.nettoyer(), et afficher son compte rendu
+    lignes_brutes = len(df)
+    df, compte_rendu = nettoyer(df)
+    print(f"Nettoyage : {lignes_brutes} → {len(df)} réservations\n", compte_rendu.to_string(index=False))
     train, test = split_train_test(df)
     print(f"Entraînement : {len(train)} réservations | test : {len(test)} réservations")
 
@@ -212,6 +215,13 @@ def main() -> None:
         "computed_features": NEW_FEATURES,
         "requires_module": "features.ajouter_variables",
         "target": TARGET,
+        # Traçabilité : sur quelles données le modèle a appris
+        "cleaning": {
+            "module": "nettoyage.nettoyer",
+            "rows_before": lignes_brutes,
+            "rows_after": len(df),
+            "rules": compte_rendu.to_dict(orient="records"),
+        },
         "train_period": [str(train["arrival_date"].min().date()), str(train["arrival_date"].max().date())],
         "test_period": [str(test["arrival_date"].min().date()), str(test["arrival_date"].max().date())],
         "hyperparameters": {"C": best_C, "decision_threshold": threshold},
